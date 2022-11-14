@@ -87,7 +87,7 @@ In task 1.3 we were asked to perform the same task as 1.2 only using the apply f
 
 Input: list of lists of type Number
 Output: A list that includes 2 numbers: maximum and minimum - from the union of all lists
-Problems I encountered: Lack of familiarity with the apply function - I learned and understood how to use it
+Problems I encountered: Lack of familiarity with the apply function -> I learned and understood how to use it
 |#
 
 (:  min&max_apply : (Listof(Listof Number)) -> (Listof Number))
@@ -98,6 +98,7 @@ Problems I encountered: Lack of familiarity with the apply function - I learned 
   ))
 (test (min&max_apply null) => null) ;check the first condition
 (test (min&max_apply '(() ())) => null) ;check the second condition
+(test (min&max_apply '(())) => null) ;check the second condition
 (test (min&max_apply '((1))) => '(1 1))
 (test (min&max_apply '((1.0))) => '(1.0 1.0)) ;If one number is of type FLOAT then the new list should return with numbers of that type
 (test (min&max_apply '((1) (1) (1))) => '(1 1)) ;because of all the numbers are the same the min and the max should be the same number
@@ -107,3 +108,25 @@ Problems I encountered: Lack of familiarity with the apply function - I learned 
 (test (min&max_apply '(() (1) () (2) () (3))) => '(1 3))
 (test (min&max_apply '((1 1) (1) () (2) () (3))) => '(1 3))
 (test (min&max_apply '((1 2 3) (2 3 3 4) (9 2 -1) (233 11 90))) => '(-1 233)) ;I took this test from the instructions of the assignment
+
+
+#|
+Task 2:
+In this task we will have to define a new type named Table, create constructors and functions for it.
+
+Task 2.1:In task 2.1 we were asked to defining a Table object - this will act as a Table data structure.
+Each element in the table will be keyed (indexed) with a symbol.
+We built two constructors: an empty constructor and a constructor that accepts parameters (key, value, table).
+
+Problems I encountered: -
+|#
+
+(define-type Table
+  [EmptyTbl] ;empty constructor
+  [Addition Symbol String Table] ; A constructor that accepts parameters
+  )
+
+(test (EmptyTbl) => (EmptyTbl))  ;I took this test from the instructions of the assignment
+(test (Addition 'a "A" (EmptyTbl))=> (Addition 'a "A" (EmptyTbl)))
+(test (Table? (EmptyTbl)) => #t) ;I used the example from lecture 3 where we tested whether a snake is an animal
+(test (Table? (Addition 'a "A" (EmptyTbl))) => #t)
