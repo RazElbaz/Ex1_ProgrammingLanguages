@@ -90,7 +90,7 @@ Output: A list that includes 2 numbers: maximum and minimum - from the union of 
 Problems I encountered: Lack of familiarity with the apply function -> I learned and understood how to use it
 |#
 
-(:  min&max_apply : (Listof(Listof Number)) -> (Listof Number))
+(: min&max_apply : (Listof(Listof Number)) -> (Listof Number))
 (define ( min&max_apply lst)
   (cond [(null? lst) null]
         [(null? (open-list lst)) null]
@@ -113,20 +113,33 @@ Problems I encountered: Lack of familiarity with the apply function -> I learned
 #|
 Task 2:
 In this task we will have to define a new type named Table, create constructors and functions for it.
-
-Task 2.1:In task 2.1 we were asked to defining a Table object - this will act as a Table data structure.
+---------------------------------------------------------------------------------------------------------------------------------------------
+Task 2.1:
+In task 2.1 we were asked to defining a Table object - this will act as a Table data structure and to built an empty constructor.
 Each element in the table will be keyed (indexed) with a symbol.
-We built two constructors: an empty constructor and a constructor that accepts parameters (key, value, table).
-
+I built an empty constructor and a constructor that accepts parameters (key, value, table).
+Input:-
+Output: -
 Problems I encountered: -
+---------------------------------------------------------------------------------------------------------------------------------------------
+Task 2.2:
+In task 2.2 we had to implement the Add operation but this too should be a variant of thedata type so I built a constructor that accepts
+parameters (key, value, table).
+
+Input: a symbol (key), a string (value), and an existing table
+Output: extended table
+Problems I encountered: At first I only created an empty constructor, I created a function called Add and after reading it I realized that I
+                        needed to create a constructor that accepts parameters - and so I did.
+---------------------------------------------------------------------------------------------------------------------------------------------
 |#
 
 (define-type Table
-  [EmptyTbl] ;empty constructor
-  [Addition Symbol String Table] ; A constructor that accepts parameters
+  [EmptyTbl] ; Task 2.1: empty constructor
+  [Add Symbol String Table] ; Task 2.2: A constructor that accepts parameters
   )
 
 (test (EmptyTbl) => (EmptyTbl))  ;I took this test from the instructions of the assignment
-(test (Addition 'a "A" (EmptyTbl))=> (Addition 'a "A" (EmptyTbl)))
+(test (Add 'a "A" (EmptyTbl))=> (Add 'a "A" (EmptyTbl)))
 (test (Table? (EmptyTbl)) => #t) ;I used the example from lecture 3 where we tested whether a snake is an animal
-(test (Table? (Addition 'a "A" (EmptyTbl))) => #t)
+(test (Table? (Add 'a "A" (EmptyTbl))) => #t)
+
