@@ -15,6 +15,7 @@ the concatenation of the lists according to the order we received them.
 Input: list of lists of type Number
 Output: one list that contains a concatenation of all lists
 Problems I encountered: closing parentheses, due to the fact that only in the first assignment I experimented with this programming language
+Time: 40 minutes
 |#
 (: open-list : (Listof(Listof Number)) -> (Listof Number))
 (define (open-list lst)
@@ -42,6 +43,7 @@ maximum: Gets a list of numbers and returns the maximum number among them
 Input: list of lists of type Number
 Output: A list that includes 2 numbers: maximum and minimum - from the union of all lists
 Problems I encountered: -
+Time: 20 minutes
 |#
 (: minimum : (Listof Number) -> Number)
 (define (minimum lst)
@@ -88,6 +90,7 @@ In task 1.3 we were asked to perform the same task as 1.2 only using the apply f
 Input: list of lists of type Number
 Output: A list that includes 2 numbers: maximum and minimum - from the union of all lists
 Problems I encountered: Lack of familiarity with the apply function -> I learned and understood how to use it
+Time: 1 hour and 10 minutes
 |#
 
 (: min&max_apply : (Listof(Listof Number)) -> (Listof Number))
@@ -131,6 +134,7 @@ Output: extended table
 Problems I encountered: At first I only created an empty constructor, I created a function called Add and after reading it I realized that I
                         needed to create a constructor that accepts parameters - and so I did.
 ---------------------------------------------------------------------------------------------------------------------------------------------
+Time: 2 hours
 |#
 
 (define-type Table
@@ -143,3 +147,49 @@ Problems I encountered: At first I only created an empty constructor, I created 
 (test (Table? (EmptyTbl)) => #t) ;I used the example from lecture 3 where we tested whether a snake is an animal
 (test (Table? (Add 'a "A" (EmptyTbl))) => #t)
 
+#|
+Task 2.3:
+In task 2.3 we had to implement the search operation search-table - the search operation which should take as input a symbol (key) and a table
+and return the first one that the function finds if the key does not appear in the original table, it should return a #f value
+
+Input:
+1) Symbol InSymbol - A symbol we need to search for in the Table
+2) Table InTable - A table where we need to look for the symbol in it
+
+Output:
+String- The first value (string) that matches the key (symbol)
+OR
+#f- if the key does not appear in the original table
+
+Problems I encountered:I was having trouble trying to recursively access a table object I created.
+After repeating exercises and lectures and i realizing that when we use ADD we seem to get the rest of the table and go through the other keys, I was able to solve this task.
+This is the task that took me the most time.
+
+Time: 2 hours and 15 minutes
+|#
+
+
+(: search-table : Symbol Table ->(U String #f)) ;I used lecture 3 where we defined a union of returnable variables
+(define (search-table InSymbol InTable)
+  (cases InTable
+    [(EmptyTbl) #f]
+    [(Add CurrSymbol CurrString CurrTable) ;CurrSymbol-current Symbol  CurrString-current String CurrTable-current Table
+    (if(equal? InSymbol CurrSymbol)CurrString ;If the requested symbol is found
+       (search-table InSymbol CurrTable)) ;Otherwise, we will repeat the function recursively
+    ]))
+;test empty styring-> "" is empty string
+(test (search-table 'a (Add 'a "" (Add 'b "B" (Add 'a "A"(EmptyTbl)))))=> "")
+;test non empty styring-> " " is not an empty string
+(test (search-table 'a (Add 'a " " (Add 'b "B" (Add 'a "A"(EmptyTbl)))))=> " ")
+;test false+tests given in the assignment
+(test (search-table 'c (Add 'a "AAA" (Add 'b "B" (Add 'a "A"(EmptyTbl)))))=> #f)
+(test (search-table 'r (Add 'a "AAA" (Add 'b "B" (Add 'a "A"(EmptyTbl)))))=> #f)
+(test (search-table 'a (Add 'r "AAA" (Add 'b "B" (Add 'a "A"(EmptyTbl)))))=> "A")
+(test (search-table 'b (Add 'r "AAA" (Add 'b "B" (Add 'a "A"(EmptyTbl)))))=> "B")
+;A test of a symbol that is a word and not a single character
+(test (search-table 'hello (Add 'hello "HELLO" (Add 'world "WORLD" (Add '! "!"(EmptyTbl)))))=> "HELLO")
+(test (search-table 'world (Add 'hello "HELLO" (Add 'world "WORLD" (Add '! "!"(EmptyTbl)))))=> "WORLD")
+;A test of a symbol that is not a letter
+(test (search-table '! (Add 'hello "HELLO" (Add 'world "WORLD" (Add '! "!"(EmptyTbl)))))=> "!")
+(test (search-table '!!!!! (Add 'hello "HELLO" (Add 'world "WORLD" (Add '!!!!! "!"(EmptyTbl)))))=> "!")
+(test (search-table '!!!!! (Add 'hello "HELLO" (Add 'world "WORLD" (Add '!!!! "!"(EmptyTbl)))))=> #f) 
