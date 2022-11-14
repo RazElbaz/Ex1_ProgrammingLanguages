@@ -192,4 +192,41 @@ Time: 2 hours and 15 minutes
 ;A test of a symbol that is not a letter
 (test (search-table '! (Add 'hello "HELLO" (Add 'world "WORLD" (Add '! "!"(EmptyTbl)))))=> "!")
 (test (search-table '!!!!! (Add 'hello "HELLO" (Add 'world "WORLD" (Add '!!!!! "!"(EmptyTbl)))))=> "!")
-(test (search-table '!!!!! (Add 'hello "HELLO" (Add 'world "WORLD" (Add '!!!! "!"(EmptyTbl)))))=> #f) 
+(test (search-table '!!!!! (Add 'hello "HELLO" (Add 'world "WORLD" (Add '!!!! "!"(EmptyTbl)))))=> #f)
+
+#|
+Task 2.4:
+In task 2.4 we had to implement the remove item remve-item operation: the operation should take as input a table and a symbol (key) and return a new table containing the items
+of the original table except the item to be deleted without the key value
+
+Input:
+1) Symbol InSymbol - A symbol we need to search for in the Table and remove
+2) Table InTable - A table where we need to look for the symbol in it
+Output:
+A new table containing the items of the original table except the item to be deleted without the key value
+
+Problems I encountered:After I understood the problem I encountered in task 2.3, this task was easier for me, but it took me a while to understand how to create the tests
+                      (especially the ones with the empty table)
+Time: 1 hour and 15 minutes
+|#
+
+(: remove-item : Table Symbol -> Table) 
+(define (remove-item InTable InSymbol)
+  (cases InTable
+    [(EmptyTbl)(EmptyTbl)]
+    [(Add CurrSymbol CurrString CurrTable) ;CurrSymbol-current Symbol  CurrString-current String CurrTable-current Table
+    (if(equal? InSymbol CurrSymbol) CurrTable ;If the requested symbol is found
+       (Add CurrSymbol CurrString (remove-item CurrTable InSymbol ))) ;Otherwise, we will repeat the function recursively
+    ]))
+;A test of the assignment instructions If the original table was empty, it should return an empty table value.
+(test (remove-item (EmptyTbl) 'a) => (EmptyTbl))
+;test empty styring-> "" is empty string
+(test (remove-item (Add 'a "" (Add 'b "B" (Add 'a "A"(EmptyTbl)))) 'a)=> (Add 'b "B" (Add 'a "A"(EmptyTbl))))
+;test non empty styring-> " " is not an empty string
+(test (remove-item(Add 'a " " (Add 'b "B" (Add 'a "A"(EmptyTbl)))) 'a)=> (Add 'b "B" (Add 'a "A"(EmptyTbl))))
+;tests given in the assignment+ my tests
+(test (remove-item (Add 'a "AAA" (Add 'b "B" (Add 'a "A"(EmptyTbl)))) 'b)=> (Add 'a "AAA" (Add 'a "A" (EmptyTbl))))
+(test (remove-item (Add 'a "AAA" (Add 'b "B" (Add 'a "A"(EmptyTbl)))) 'a)=> (Add 'b "B" (Add 'a "A" (EmptyTbl))))
+(test (remove-item (Add 'c "AAA" (Add 'b "B" (Add 'a "A"(EmptyTbl)))) 'a)=> (Add 'c "AAA" (Add 'b "B"(EmptyTbl))))
+(test (remove-item (Add 'hello "HELLO" (Add 'world "WORLD" (Add '!!!!! "!"(EmptyTbl)))) '!!!!!)=> (Add 'hello "HELLO" (Add 'world "WORLD"(EmptyTbl))))
+(test (remove-item (Add 'hello "HELLO" (Add 'world "WORLD" (Add '!!!!! "!"(EmptyTbl)))) 'hello)=> (Add 'world "WORLD" (Add '!!!!! "!"(EmptyTbl))))
