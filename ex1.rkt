@@ -56,7 +56,7 @@ Time: 20 minutes
   (cond [(null? lst) -inf.0] ;;Using Hint: You can use the default min/max values Values like +inf.0 / -inf.0 which refers to ±∞
         [else (max (first lst) (maximum (rest lst)))]
   ))
-(test (maximum null) =>  -inf.0)
+(test (maximum null) => -inf.0)
 (test (maximum '(1 2 3 4)) => 4.0)
 (test (maximum '(1/2 1/4)) => 0.5)
 (test (maximum '(1/2 2 3 4)) => 4.0)
@@ -64,16 +64,18 @@ Time: 20 minutes
 
 (: min&max : (Listof(Listof Number)) -> (Listof Number))
 (define (min&max lst)
-  (cond [(null? lst) null]
+  (cond [(null? (open-list lst)) (list -inf.0 +inf.0)]
         [else (list(minimum(open-list lst)) (maximum(open-list lst)))]
   ))
 
-(test (min&max null) => null)
+(test (min&max null) => '(-inf.0 +inf.0))
+(test (min&max '((-inf.0))) => '(-inf.0 -inf.0))
+(test (min&max '((+inf.0))) => '(+inf.0 +inf.0))
 (test (min&max '((1) (1) (1))) => '(1.0 1.0))       ;;because of all the numbers are the same the min and the max should be the same number
 (test (min&max '((1) (2) (3))) => '(1.0 3.0))       ;;a test that includes an empty list
-(test (min&max '(() ())) => '(+inf.0 -inf.0))
+(test (min&max '(() ())) => '(-inf.0 +inf.0))
 (test (min&max '(() (1) () ())) => '(1.0 1.0))
-(test (min&max '(() () () ())) => '(+inf.0 -inf.0)) ;;for testing the auxiliary functions
+(test (min&max '(() () () ())) => '(-inf.0 +inf.0)) ;;for testing the auxiliary functions
 (test (min&max '(() (1) () (2) () (3))) => '(1.0 3.0))
 (test (min&max '((1 1) (1) () (2) () (3))) => '(1.0 3.0))
 (test (min&max '((1 2 3) (2 3 3 4) (9 2 -1) (233 11 90))) => '(-1.0 233.0)) ;;I took this test from the instructions of the assignment
@@ -92,14 +94,17 @@ Time: 1 hour and 10 minutes
 
 (: min&max_apply : (Listof(Listof Number)) -> (Listof Number))
 (define ( min&max_apply lst)
-  (cond [(null? lst) null]
-        [(null? (open-list lst)) null]
+  (cond [(null? lst) '(-inf.0 +inf.0)]
+        [(null? (open-list lst)) '(-inf.0 +inf.0)]
         [else (list(apply min(open-list lst)) (apply max(open-list lst)))]
   ))
 
-(test (min&max_apply null) => null) ;;check the first condition
-(test (min&max_apply '(() ())) => null) ;;check the second condition
-(test (min&max_apply '(())) => null) ;;check the second condition
+(test (min&max_apply null) => '(-inf.0 +inf.0)) ;;check the first condition
+(test (min&max_apply '()) => '(-inf.0 +inf.0))
+(test (min&max_apply '((-inf.0))) => '(-inf.0 -inf.0))
+(test (min&max_apply '((+inf.0))) => '(+inf.0 +inf.0))
+(test (min&max_apply '(() ())) => '(-inf.0 +inf.0)) ;;check the second condition
+(test (min&max_apply '(())) => '(-inf.0 +inf.0)) ;;check the second condition
 (test (min&max_apply '((1))) => '(1 1))
 (test (min&max_apply '((1.0))) => '(1.0 1.0)) ;;If one number is of type FLOAT then the new list should return with numbers of that type
 (test (min&max_apply '((1) (1) (1))) => '(1 1)) ;;because of all the numbers are the same the min and the max should be the same number
